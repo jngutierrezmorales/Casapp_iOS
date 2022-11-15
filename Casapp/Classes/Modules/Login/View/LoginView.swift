@@ -9,75 +9,83 @@ import SwiftUI
 
 struct LoginView: View {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var loginViewModel = LoginViewModel()
+    @ObservedObject var loginViewModel = LoginViewModel()
     @State var username: String = "test@test.com"
     @State var password: String = "test123"
+    @State private var buttonPressed: String? = nil
     
     var body: some View {
-        VStack {
-            Text("Casapp")
-                .font(.system(size: 72))
-                .bold()
-            
-            Spacer()
-            
-            Image("img_login")
-                .resizable()
-                .frame(width: 360, height: 360)
-            
-            Spacer()
-            
-            Group {
-                Text("Usuario:")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.system(size: 18, weight: .bold))
-                    .padding(.horizontal)
+        NavigationView {
+            VStack {
+                NavigationLink(destination: RegisterView(), tag: "showRegister", selection: $buttonPressed) { }
+                NavigationLink(destination: MainView(), tag: "showMain", selection: $buttonPressed) { }
                 
-                TextField("Usuario", text: $username)
-                    .padding(.horizontal)
-                    .textFieldStyle(.roundedBorder)
+                Text("Casapp")
+                    .font(.system(size: 72))
+                    .bold()
                 
                 Spacer()
                 
-                Text("Contraseña:")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.system(size: 18, weight: .bold))
-                    .padding(.horizontal)
+                Image("img_login")
+                    .resizable()
+                    .frame(width: 360, height: 360)
                 
-                SecureField("Contraseña", text: $password)
-                    .padding(.horizontal)
-                    .textFieldStyle(.roundedBorder)
-            }
-            
-            Spacer()
-            
-            HStack(spacing: 10) {
-                Button("Acceder") {
-                    let _: () = loginViewModel.signIn(email: username, password: password)
-                }
-                .frame(height: 45)
-                .buttonStyle(.bordered)
-                .frame(maxWidth: .infinity)
-                .background(Color(.black))
-                .foregroundColor(.white)
-                .font(Font.body.bold())
-                .clipShape(Capsule())
+                Spacer()
                 
-                Button("Crear usuario") {
-                    print("aaaaaaa")
+                Group {
+                    Text("Usuario:")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.system(size: 18, weight: .bold))
+                        .padding(.horizontal)
+                    
+                    TextField("Introduce email", text: $username)
+                        .padding(.horizontal)
+                        .textFieldStyle(.roundedBorder)
+                    
+                    Spacer()
+                    
+                    Text("Contraseña:")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.system(size: 18, weight: .bold))
+                        .padding(.horizontal)
+                    
+                    SecureField("Introduce contraseña", text: $password)
+                        .padding(.horizontal)
+                        .textFieldStyle(.roundedBorder)
                 }
-                .frame(height: 45)
-                .buttonStyle(.bordered)
-                .frame(maxWidth: .infinity)
-                .background(Color(.black))
-                .foregroundColor(.white)
-                .font(Font.body.bold())
-                .clipShape(Capsule())
+                
+                Spacer()
+                
+                HStack(spacing: 10) {
+                    Button("Acceder") {
+                        loginViewModel.signIn(email: username, password: password)
+                        buttonPressed = "showMain"
+                    }
+                    .frame(height: 45)
+                    .buttonStyle(.bordered)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.black))
+                    .foregroundColor(.white)
+                    .font(Font.body.bold())
+                    .clipShape(Capsule())
+                    
+                    Button("Crear usuario") {
+                        buttonPressed = "showRegister"
+                    }
+                    .frame(height: 45)
+                    .buttonStyle(.bordered)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(.black))
+                    .foregroundColor(.white)
+                    .font(Font.body.bold())
+                    .clipShape(Capsule())
+                }
+                .padding(.horizontal)
+                
+                Spacer()
             }
-            .padding(.horizontal)
-            
-            Spacer()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

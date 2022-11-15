@@ -8,8 +8,21 @@
 import SwiftUI
 
 struct MainView: View {
+    @ObservedObject var mainViewModel = MainViewModel()
+    @State private var buttonPressed: String? = nil
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            VStack {
+                NavigationLink(destination: LoginView(), tag: "showLogin", selection: $buttonPressed) { }
+                
+                Button("Logout") {
+                    mainViewModel.signOut()
+                    buttonPressed = "showLogin"
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

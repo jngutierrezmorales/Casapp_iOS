@@ -6,3 +6,23 @@
 //
 
 import Foundation
+
+enum SplashState {
+    case LOADING
+    case SUCCESS
+}
+
+class SplashViewModel: ObservableObject {
+    private let authenticationRepository: AuthenticationRepository
+    @Published var currentState: SplashState = .LOADING
+    
+    init(authenticationRepository: AuthenticationRepository = AuthenticationRepository(authenticationService: AuthenticationService())) {
+        self.authenticationRepository = authenticationRepository
+    }
+    
+    func getUser() -> Bool {
+        let user = authenticationRepository.getUser()
+        currentState = .SUCCESS
+        return user
+    }
+}
