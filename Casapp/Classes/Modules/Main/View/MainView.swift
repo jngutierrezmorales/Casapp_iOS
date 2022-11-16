@@ -20,6 +20,10 @@ struct MainView: View {
                     mainViewModel.signOut()
                     buttonPressed = "showLogin"
                 }
+                
+                TabView {
+                    Text()
+                }
             }
         }
         .navigationBarBackButtonHidden(true)

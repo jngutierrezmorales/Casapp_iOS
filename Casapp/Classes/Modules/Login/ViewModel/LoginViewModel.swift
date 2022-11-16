@@ -7,10 +7,17 @@
 
 import Foundation
 
+enum LoadingState {
+    case INITIAL
+    case SUCCESS
+}
+
 final class LoginViewModel: ObservableObject {
+    private let authenticationRepository: AuthenticationRepository
+    @Published var currentState: LoadingState = .INITIAL
     @Published var user: User?
     @Published var messageError: String?
-    private let authenticationRepository: AuthenticationRepository
+    @Published var loginError: Bool = false
     
     init(authenticationRepository: AuthenticationRepository = AuthenticationRepository(authenticationService: AuthenticationService())) {
         self.authenticationRepository = authenticationRepository
@@ -19,11 +26,14 @@ final class LoginViewModel: ObservableObject {
     func signIn(email: String, password: String) {
         authenticationRepository.signIn(email: email, password: password) { [weak self] result in
             guard let self = self else { return }
+            
             switch result {
             case .success(let user):
                 self.user = user
+                self.currentState = .SUCCESS
             case .failure(let error):
                 self.messageError = error.localizedDescription
+                self.loginError = true
             }
         }
     }

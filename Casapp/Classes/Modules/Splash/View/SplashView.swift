@@ -16,10 +16,12 @@ struct SplashView: View {
     var body: some View {
         switch viewModel.currentState {
         case .SUCCESS:
-            if user {
-                MainView()
-            } else {
-                LoginView()
+            NavigationView {
+                if user {
+                    MainView()
+                } else {
+                    LoginView()
+                }
             }
         case .LOADING:
             ZStack {

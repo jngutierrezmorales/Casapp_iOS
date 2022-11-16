@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseCore
 import FirebaseAuth
 
 struct User {
@@ -58,7 +59,7 @@ final class AuthenticationService {
         do {
             try auth.signOut()
             logout = true
-            print("Logout success")
+            print("Logout")
         } catch let signOutError as NSError {
             print("Logout error %@", signOutError)
         }
