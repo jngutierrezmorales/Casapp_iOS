@@ -12,7 +12,7 @@ enum SplashState {
     case SUCCESS
 }
 
-class SplashViewModel: ObservableObject {
+final class SplashViewModel: ObservableObject {
     private let authenticationRepository: AuthenticationRepository
     @Published var currentState: SplashState = .LOADING
     

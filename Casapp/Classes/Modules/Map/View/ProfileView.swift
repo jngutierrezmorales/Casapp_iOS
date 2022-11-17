@@ -8,8 +8,31 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @ObservedObject var mainViewModel = ProfileViewModel()
+    @State private var navigateTo: String? = nil
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            VStack {
+                NavigationLink(destination: LoginView(), tag: "showLogin", selection: $navigateTo) { }
+                
+                Button("Logout") {
+                    if logout() {
+                        navigateTo = "showLogin"
+                    }
+                }
+                .frame(height: 45)
+                .buttonStyle(.bordered)
+                .frame(maxWidth: .infinity)
+                .background(Color(.black))
+                .foregroundColor(.white)
+                .font(Font.body.bold())
+                .clipShape(Capsule())
+            }
+            .padding(.horizontal)
+    }
+    
+    private func logout() -> Bool {
+        return mainViewModel.signOut()
     }
 }
 

@@ -7,14 +7,4 @@
 
 import Foundation
 
-final class MainViewModel: ObservableObject {
-    private let authenticationRepository: AuthenticationRepository
-    
-    init(authenticationRepository: AuthenticationRepository = AuthenticationRepository(authenticationService: AuthenticationService())) {
-        self.authenticationRepository = authenticationRepository
-    }
-    
-    func signOut() -> Bool {
-        return authenticationRepository.signOut()
-    }
-}
+final class MainViewModel: ObservableObject { }

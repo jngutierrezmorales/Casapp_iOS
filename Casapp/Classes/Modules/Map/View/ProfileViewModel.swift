@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+final class ProfileViewModel: ObservableObject {
+    private let authenticationRepository: AuthenticationRepository
+    
+    init(authenticationRepository: AuthenticationRepository = AuthenticationRepository(authenticationService: AuthenticationService())) {
+        self.authenticationRepository = authenticationRepository
+    }
+    
+    func signOut() -> Bool {
+        return authenticationRepository.signOut()
+    }
+}
