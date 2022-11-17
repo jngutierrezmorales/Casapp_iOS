@@ -18,11 +18,11 @@ final class AuthenticationRepository {
         return authenticationService.getUser()
     }
     
-    func signIn(email: String, password: String, completionBlock: @escaping (Result<User, Error>) -> Void) {
+    func signIn(email: String, password: String, completionBlock: @escaping (Result<UserService, Error>) -> Void) {
         authenticationService.signIn(email: email, password: password, completionBlock: completionBlock)
     }
     
-    func signUp(email: String, password: String, completionBlock: @escaping (Result<User, Error>) -> Void) {
+    func signUp(email: String, password: String, completionBlock: @escaping (Result<UserService, Error>) -> Void) {
         authenticationService.signUp(email: email, password: password, completionBlock: completionBlock)
     }
     

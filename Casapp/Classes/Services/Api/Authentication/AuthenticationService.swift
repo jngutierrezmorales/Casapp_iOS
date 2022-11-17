@@ -9,13 +9,13 @@ import Foundation
 import FirebaseCore
 import FirebaseAuth
 
-struct User {
+struct UserService {
     let email: String
 }
 
 final class AuthenticationService {
-    private var auth = Auth.auth()
-    private var user = Auth.auth().currentUser
+    private let auth = Auth.auth()
+    private let user = Auth.auth().currentUser
     
     func getUser() -> Bool {
         if user?.uid != nil {
@@ -25,7 +25,7 @@ final class AuthenticationService {
         }
     }
     
-    func signIn(email: String, password: String, completionBlock: @escaping (Result<User, Error>) -> Void) {
+    func signIn(email: String, password: String, completionBlock: @escaping (Result<UserService, Error>) -> Void) {
         auth.signIn(withEmail: email, password: password) { result, error in
             if let error = error {
                 print("Login error \(error.localizedDescription)")
@@ -39,7 +39,7 @@ final class AuthenticationService {
         }
     }
     
-    func signUp(email: String, password: String, completionBlock: @escaping (Result<User, Error>) -> Void) {
+    func signUp(email: String, password: String, completionBlock: @escaping (Result<UserService, Error>) -> Void) {
         auth.createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 print("Register error \(error.localizedDescription)")

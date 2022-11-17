@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension Optional where Wrapped == Date {
+    var valueOrNow: Date {
+        return self ?? Date.now
+    }
+}

@@ -6,3 +6,15 @@
 //
 
 import Foundation
+
+final class HomeRepository {
+    private let homeService: HomeService
+    
+    init(homeService: HomeService) {
+        self.homeService = homeService
+    }
+    
+    func loadHomes() {
+        return homeService.loadHomes()
+    }
+}

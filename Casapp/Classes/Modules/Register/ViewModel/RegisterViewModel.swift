@@ -15,7 +15,7 @@ enum RegisterState {
 final class RegisterViewModel: ObservableObject {
     private let authenticationRepository: AuthenticationRepository
     @Published var currentState: RegisterState = .INITIAL
-    @Published var user: User?
+    @Published var user: UserService?
     @Published var messageError: String?
     @Published var registerError: Bool = false
     

@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension Optional where Wrapped == Int {
+    var valueOrZero: Int {
+        return self ?? 0
+    }
+}

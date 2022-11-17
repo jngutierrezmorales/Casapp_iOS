@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension Optional where Wrapped == Bool {
+    var valueOrFalse: Bool {
+        return self ?? false
+    }
+}

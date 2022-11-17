@@ -15,7 +15,7 @@ enum LoadingState {
 final class LoginViewModel: ObservableObject {
     private let authenticationRepository: AuthenticationRepository
     @Published var currentState: LoadingState = .INITIAL
-    @Published var user: User?
+    @Published var user: UserService?
     @Published var messageError: String?
     @Published var loginError: Bool = false
     

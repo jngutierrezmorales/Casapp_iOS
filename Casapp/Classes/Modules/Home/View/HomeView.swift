@@ -8,7 +8,15 @@
 import SwiftUI
 
 struct HomeView: View {
+    @ObservedObject private var viewModel = HomeViewModel()
+    @State private var navigateTo: String? = nil
+    
     var body: some View {
+        Button("Homes") {
+            let homes = viewModel.loadHomes
+            print(homes)
+        }
+        
         List {
             ForEach(0..<15) { i in
                 Section {
