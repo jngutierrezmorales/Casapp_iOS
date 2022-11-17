@@ -14,7 +14,7 @@ final class HomeRepository {
         self.homeService = homeService
     }
     
-    func loadHomes() {
+    func loadHomes() -> [HomeDto] {
         return homeService.loadHomes()
     }
 }

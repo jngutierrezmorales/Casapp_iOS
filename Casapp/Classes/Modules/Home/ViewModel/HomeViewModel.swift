@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 enum HomeState {
     case INITIAL
@@ -15,12 +16,13 @@ enum HomeState {
 final class HomeViewModel: ObservableObject {
     private let homeRepository: HomeRepository
     @Published var currentState: HomeState = .INITIAL
+    @Published var homes = [HomeDto]()
     
     init(homeRepository: HomeRepository = HomeRepository(homeService: HomeService())) {
         self.homeRepository = homeRepository
     }
     
-    func loadHomes() {
-        homeRepository.loadHomes()
+    func loadHomes() -> [HomeDto] {
+        return homeRepository.loadHomes()
     }
 }

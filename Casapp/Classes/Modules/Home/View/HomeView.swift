@@ -13,8 +13,9 @@ struct HomeView: View {
     
     var body: some View {
         Button("Homes") {
-            let homes = viewModel.loadHomes
-            print(homes)
+            print(viewModel.loadHomes().map { home in
+                home.imageUrl
+            })
         }
         
         List {

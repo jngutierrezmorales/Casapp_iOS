@@ -42,8 +42,38 @@ struct HomeDto: Codable {
         case isFavorite
     }
     
-    init() {
-        homeId = nil
+    init(
+        homeId: String?,
+        title: String?,
+        description: String?,
+        imageUrl: String?,
+        size: String?,
+        location: String?,
+        latitude: Double?,
+        longitude: Double?,
+        phone: String?,
+        homeState: String?,
+        userId: String?,
+        owner: String?,
+        publishTime: String?,
+        isPublished: Bool?,
+        isFavorite: Bool?
+    ) {
+        self.homeId = homeId
+        self.title = title
+        self.description = description
+        self.imageUrl = imageUrl
+        self.size = size
+        self.location = location
+        self.latitude = latitude
+        self.longitude = longitude
+        self.phone = phone
+        self.homeState = homeState
+        self.userId = userId
+        self.owner = owner
+        self.publishTime = publishTime
+        self.isPublished = isPublished
+        self.isFavorite = isFavorite
     }
     
     init(from decoder: Decoder) throws {
