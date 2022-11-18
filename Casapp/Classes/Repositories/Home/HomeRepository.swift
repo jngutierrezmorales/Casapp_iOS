@@ -14,7 +14,11 @@ final class HomeRepository {
         self.homeService = homeService
     }
     
-    func loadHomes() -> [HomeDto] {
-        return homeService.loadHomes()
+    func fetchHomes(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
+        homeService.fetchHomes(completionBlock: completionBlock)
     }
+    
+//    func loadHomes() -> [HomeDto] {
+//        return homeService.loadHomes()
+//    }
 }

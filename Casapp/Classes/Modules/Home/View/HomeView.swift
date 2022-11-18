@@ -12,55 +12,45 @@ struct HomeView: View {
     @State private var navigateTo: String? = nil
     
     var body: some View {
-        Button("Homes") {
-            print(viewModel.loadHomes().map { home in
-                home.imageUrl
-            })
-        }
-        
-        List {
-            ForEach(0..<15) { i in
-                Section {
-                    Image("img_test")
-                        .resizable()
-                        .scaledToFill()
+        NavigationView {
+            List(viewModel.homes, id: \.homeId) { home in
+                    Section {
+                        Image("img_test")
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity)
+                            .overlay(
+                                ZStack {
+                                    Text(home.homeState ?? "")
+                                        .padding(8)
+                                        .foregroundColor(.white)
+                                }
+                                    .background(.black)
+                                    .opacity(0.9)
+                                    .cornerRadius(10.0)
+                                    .padding(8),
+                                alignment: .bottomTrailing
+                            )
+
+                        HStack {
+                            Label(home.location ?? "", systemImage: "map.fill")
+                                .foregroundColor(.black)
+                                .font(.system(size: 12))
+
+                            Label(("\(home.size ?? "")m"), systemImage: "house.and.flag.fill")
+                                .foregroundColor(.black)
+                                .font(.system(size: 12))
+                            
+                            Label("199.999", systemImage: "eurosign")
+                                .foregroundColor(.black)
+                                .font(.system(size: 12))
+                        }
                         .frame(maxWidth: .infinity)
-                        .overlay(
-                            ZStack {
-                                Text("COMPARTIR")
-                                    .padding(8)
-                                    .foregroundColor(.white)
-                            }
-                                .background(.black)
-                                .opacity(0.9)
-                                .cornerRadius(10.0)
-                                .padding(8),
-                            alignment: .bottomTrailing
-                        )
-                    
-                    HStack {
-                        Spacer()
-                        
-                        Label("Madrid", systemImage: "map.fill")
-                            .foregroundColor(.black)
-                        
-                        Spacer()
-                        
-                        Label("99m", systemImage: "house.and.flag.fill")
-                            .foregroundColor(.black)
-                        
-                        Spacer()
-                        
-                        Label("199.999", systemImage: "eurosign")
-                            .foregroundColor(.black)
-                        
-                        Spacer()
                     }
                 }
-            }
-            .listRowInsets(EdgeInsets())
+                .listRowInsets(EdgeInsets())
+                .listStyle(.insetGrouped)
         }
-        .listStyle(.insetGrouped)
     }
 }
 
