@@ -14,10 +14,6 @@ final class AuthenticationRepository {
         self.authenticationService = authenticationService
     }
     
-    func getUser() -> Bool {
-        return authenticationService.getUser()
-    }
-    
     func signIn(email: String, password: String, completionBlock: @escaping (Result<UserService, Error>) -> Void) {
         authenticationService.signIn(email: email, password: password, completionBlock: completionBlock)
     }
@@ -28,5 +24,22 @@ final class AuthenticationRepository {
     
     func signOut() -> Bool {
         return authenticationService.signOut()
+    }
+    
+    func getUser() -> User {
+        let user = authenticationService.getUser()
+        
+        if user == nil {
+            return User()
+        } else {
+            return User(
+                id: user?.uid,
+                email: user?.email
+            )
+        }
+    }
+    
+    func getUserBool() -> Bool {
+        return authenticationService.getUserBool()
     }
 }

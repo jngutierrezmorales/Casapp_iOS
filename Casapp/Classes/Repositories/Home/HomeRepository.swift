@@ -18,7 +18,11 @@ final class HomeRepository {
         homeService.fetchHomes(completionBlock: completionBlock)
     }
     
-//    func loadHomes() -> [HomeDto] {
-//        return homeService.loadHomes()
-//    }
+    func fetchHomesFavorites(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
+        homeService.fetchHomesFavorites(completionBlock: completionBlock)
+    }
+    
+    func fetchAds(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
+        homeService.fetchAds(completionBlock: completionBlock)
+    }
 }

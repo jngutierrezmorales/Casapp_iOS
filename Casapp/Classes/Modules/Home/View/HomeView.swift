@@ -15,22 +15,24 @@ struct HomeView: View {
         NavigationView {
             List(viewModel.homes, id: \.homeId) { home in
                     Section {
-                        Image("img_test")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity)
-                            .overlay(
-                                ZStack {
-                                    Text(home.homeState ?? "")
-                                        .padding(8)
-                                        .foregroundColor(.white)
-                                }
-                                    .background(.black)
-                                    .opacity(0.9)
-                                    .cornerRadius(10.0)
-                                    .padding(8),
-                                alignment: .bottomTrailing
-                            )
+                        AsyncImage(url: URL(string: home.image ?? "img_test")) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: 160)
+                        .overlay(
+                            ZStack {
+                                Text(home.state ?? "")
+                                    .padding(8)
+                                    .foregroundColor(.white)
+                            }
+                                .background(.black)
+                                .opacity(0.9)
+                                .cornerRadius(10.0)
+                                .padding(8),
+                            alignment: .bottomTrailing
+                        )
 
                         HStack {
                             Label(home.location ?? "", systemImage: "map.fill")

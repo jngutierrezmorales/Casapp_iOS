@@ -13,9 +13,10 @@ import FirebaseFirestoreSwift
 final class HomeService {
     private let database = Firestore.firestore()
     @Published var homes: [HomeDto] = []
+    private let user = AuthenticationRepository(authenticationService: AuthenticationService()).getUser().id
     
     func fetchHomes(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
-        //homes.removeAll()
+        homes.removeAll()
         
         let ref = database.collection("homes")
             .order(by: "publishTime", descending: true)
@@ -34,6 +35,7 @@ final class HomeService {
                     let title = data["title"] as? String ?? ""
                     let description = data["description"] as? String ?? ""
                     let imageUrl = data["imageUrl"] as? String ?? ""
+                    let price = data["price"] as? String ?? ""
                     let size = data["size"] as? String ?? ""
                     let location = data["location"] as? String ?? ""
                     let latitude = data["latitude"] as? Double ?? 0.0
@@ -51,6 +53,7 @@ final class HomeService {
                         title: title,
                         description: description,
                         imageUrl: imageUrl,
+                        price: price,
                         size: size,
                         location: location,
                         latitude: latitude,
@@ -64,6 +67,128 @@ final class HomeService {
                         isFavorite: isFavorite
                     )
 
+                    self.homes.append(home)
+                }
+                completionBlock(.success(self.homes))
+            }
+        }
+    }
+    
+    func fetchHomesFavorites(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
+        homes.removeAll()
+        
+        let ref = database.collectionGroup("favorites")
+            .whereField("userId", isEqualTo: user.valueOrEmpty)
+            .whereField("isFavorite", isEqualTo: true)
+            .order(by: "homeState", descending: true)
+        
+        ref.getDocuments { snapshot, error in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "fetchHomesFavorites service error")
+                return
+            }
+            
+            if let snapshot = snapshot {
+                for document in snapshot.documents {
+                    let data = document.data()
+                    
+                    let homeId = data["homeId"] as? String ?? ""
+                    let title = data["title"] as? String ?? ""
+                    let description = data["description"] as? String ?? ""
+                    let imageUrl = data["imageUrl"] as? String ?? ""
+                    let price = data["price"] as? String ?? ""
+                    let size = data["size"] as? String ?? ""
+                    let location = data["location"] as? String ?? ""
+                    let latitude = data["latitude"] as? Double ?? 0.0
+                    let longitude = data["longitude"] as? Double ?? 0.0
+                    let phone = data["phone"] as? String ?? ""
+                    let homeState = data["homeState"] as? String ?? ""
+                    let userId = data["userId"] as? String ?? ""
+                    let owner = data["owner"] as? String ?? ""
+                    let publishTime = data["publishTime"] as? String ?? ""
+                    let isPublished = data["isPublished"] as? Bool ?? true
+                    let isFavorite = data["isFavorite"] as? Bool ?? false
+                    
+                    let home = HomeDto(
+                        homeId: homeId,
+                        title: title,
+                        description: description,
+                        imageUrl: imageUrl,
+                        price: price,
+                        size: size,
+                        location: location,
+                        latitude: latitude,
+                        longitude: longitude,
+                        phone: phone,
+                        homeState: homeState,
+                        userId: userId,
+                        owner: owner,
+                        publishTime: publishTime,
+                        isPublished: isPublished,
+                        isFavorite: isFavorite
+                    )
+                    
+                    self.homes.append(home)
+                }
+                completionBlock(.success(self.homes))
+            }
+        }
+    }
+    
+    func fetchAds(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
+        homes.removeAll()
+        
+        let ref = database.collectionGroup("homes")
+            .whereField("owner", isEqualTo: user.valueOrEmpty)
+            .whereField("isPublished", isEqualTo: true)
+            .order(by: "publishTime", descending: true)
+        
+        ref.getDocuments { snapshot, error in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "fetchAds service error")
+                return
+            }
+            
+            if let snapshot = snapshot {
+                for document in snapshot.documents {
+                    let data = document.data()
+                    
+                    let homeId = data["homeId"] as? String ?? ""
+                    let title = data["title"] as? String ?? ""
+                    let description = data["description"] as? String ?? ""
+                    let imageUrl = data["imageUrl"] as? String ?? ""
+                    let price = data["price"] as? String ?? ""
+                    let size = data["size"] as? String ?? ""
+                    let location = data["location"] as? String ?? ""
+                    let latitude = data["latitude"] as? Double ?? 0.0
+                    let longitude = data["longitude"] as? Double ?? 0.0
+                    let phone = data["phone"] as? String ?? ""
+                    let homeState = data["homeState"] as? String ?? ""
+                    let userId = data["userId"] as? String ?? ""
+                    let owner = data["owner"] as? String ?? ""
+                    let publishTime = data["publishTime"] as? String ?? ""
+                    let isPublished = data["isPublished"] as? Bool ?? true
+                    let isFavorite = data["isFavorite"] as? Bool ?? false
+                    
+                    let home = HomeDto(
+                        homeId: homeId,
+                        title: title,
+                        description: description,
+                        imageUrl: imageUrl,
+                        price: price,
+                        size: size,
+                        location: location,
+                        latitude: latitude,
+                        longitude: longitude,
+                        phone: phone,
+                        homeState: homeState,
+                        userId: userId,
+                        owner: owner,
+                        publishTime: publishTime,
+                        isPublished: isPublished,
+                        isFavorite: isFavorite
+                    )
+                    
                     self.homes.append(home)
                 }
                 completionBlock(.success(self.homes))

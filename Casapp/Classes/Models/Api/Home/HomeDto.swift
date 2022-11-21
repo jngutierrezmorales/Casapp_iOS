@@ -12,6 +12,7 @@ struct HomeDto: Codable {
     var title: String?
     var description: String?
     var imageUrl: String?
+    var price: String?
     var size: String?
     var location: String?
     var latitude: Double?
@@ -29,6 +30,7 @@ struct HomeDto: Codable {
         case title
         case description
         case imageUrl
+        case price
         case size
         case location
         case latitude
@@ -42,11 +44,14 @@ struct HomeDto: Codable {
         case isFavorite
     }
     
+    init() { }
+    
     init(
         homeId: String?,
         title: String?,
         description: String?,
         imageUrl: String?,
+        price: String?,
         size: String?,
         location: String?,
         latitude: Double?,
@@ -63,6 +68,7 @@ struct HomeDto: Codable {
         self.title = title
         self.description = description
         self.imageUrl = imageUrl
+        self.price = price
         self.size = size
         self.location = location
         self.latitude = latitude
@@ -82,6 +88,7 @@ struct HomeDto: Codable {
         self.title = try container.decode(String.self, forKey: .title)
         self.description = try container.decode(String.self, forKey: .description)
         self.imageUrl = try container.decode(String.self, forKey: .imageUrl)
+        self.price = try container.decode(String.self, forKey: .price)
         self.size = try container.decode(String.self, forKey: .size)
         self.location = try container.decode(String.self, forKey: .location)
         self.latitude = try container.decode(Double.self, forKey: .latitude)
@@ -101,6 +108,7 @@ struct HomeDto: Codable {
         try container.encode(title, forKey: .title)
         try container.encode(description, forKey: .description)
         try container.encode(imageUrl, forKey: .imageUrl)
+        try container.encode(price, forKey: .price)
         try container.encode(size, forKey: .size)
         try container.encode(location, forKey: .location)
         try container.encode(latitude, forKey: .latitude)
@@ -112,5 +120,26 @@ struct HomeDto: Codable {
         try container.encode(publishTime, forKey: .publishTime)
         try container.encode(isPublished, forKey: .isPublished)
         try container.encode(isFavorite, forKey: .isFavorite)
+    }
+    
+    func toModel() -> Home {
+        return Home(
+            homeId: self.homeId.valueOrEmpty,
+            title: self.title.valueOrEmpty,
+            description: self.description.valueOrEmpty,
+            image: self.imageUrl.valueOrEmpty,
+            price: self.price.valueOrEmpty,
+            size: self.size.valueOrEmpty,
+            location: self.location.valueOrEmpty,
+            latitude: self.latitude.valueOrZero,
+            longitude: self.longitude.valueOrZero,
+            phone: self.phone.valueOrEmpty,
+            state: self.homeState,
+            isFavorite: self.isFavorite.valueOrFalse,
+            userId: User(id: self.userId),
+            owner: User(id: self.userId),
+            isPublished: self.isPublished.valueOrFalse,
+            publishTime: self.publishTime.valueOrEmpty
+        )
     }
 }

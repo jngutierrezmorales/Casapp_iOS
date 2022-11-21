@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct AdsView: View {
+    @ObservedObject private var viewModel = AdsViewModel()
+    @State private var navigateTo: String? = nil
+    
     var body: some View {
-        List {
-            ForEach(0..<15) { i in
-                Section {
-                    Image("img_test")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: .infinity)
+        NavigationView {
+            List(viewModel.ads, id: \.homeId) { home in
+                    Section {
+                        AsyncImage(url: URL(string: home.image ?? "img_test")) { image in
+                            image.resizable()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: 160)
                         .overlay(
                             ZStack {
-                                Text("COMPARTIR")
+                                Text(home.state ?? "")
                                     .padding(8)
                                     .foregroundColor(.white)
                             }
@@ -28,30 +33,26 @@ struct AdsView: View {
                                 .padding(8),
                             alignment: .bottomTrailing
                         )
-                    
-                    HStack {
-                        Spacer()
-                        
-                        Label("Madrid", systemImage: "map.fill")
-                            .foregroundColor(.black)
-                        
-                        Spacer()
-                        
-                        Label("99m", systemImage: "house.and.flag.fill")
-                            .foregroundColor(.black)
-                        
-                        Spacer()
-                        
-                        Label("199.999", systemImage: "eurosign")
-                            .foregroundColor(.black)
-                        
-                        Spacer()
+
+                        HStack {
+                            Label(home.location ?? "", systemImage: "map.fill")
+                                .foregroundColor(.black)
+                                .font(.system(size: 12))
+
+                            Label(("\(home.size ?? "")m"), systemImage: "house.and.flag.fill")
+                                .foregroundColor(.black)
+                                .font(.system(size: 12))
+                            
+                            Label("199.999", systemImage: "eurosign")
+                                .foregroundColor(.black)
+                                .font(.system(size: 12))
+                        }
+                        .frame(maxWidth: .infinity)
                     }
                 }
-            }
-            .listRowInsets(EdgeInsets())
+                .listRowInsets(EdgeInsets())
+                .listStyle(.insetGrouped)
         }
-        .listStyle(.insetGrouped)
     }
 }
 

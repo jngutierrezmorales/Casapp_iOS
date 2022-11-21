@@ -21,7 +21,7 @@ final class SplashViewModel: ObservableObject {
     }
     
     func getUser() -> Bool {
-        let user = authenticationRepository.getUser()
+        let user = authenticationRepository.getUserBool()
         currentState = .SUCCESS
         return user
     }

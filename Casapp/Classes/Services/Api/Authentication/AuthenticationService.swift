@@ -17,7 +17,11 @@ final class AuthenticationService {
     private let auth = Auth.auth()
     private let user = Auth.auth().currentUser
     
-    func getUser() -> Bool {
+    func getUser() -> FirebaseAuth.User? {
+        return user
+    }
+    
+    func getUserBool() -> Bool {
         if user?.uid != nil {
             return true
         } else {
