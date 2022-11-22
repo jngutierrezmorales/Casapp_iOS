@@ -42,4 +42,8 @@ final class AuthenticationRepository {
     func getUserBool() -> Bool {
         return authenticationService.getUserBool()
     }
+    
+    func updatePassword(password: String) {
+        authenticationService.updatePassword(password: password)
+    }
 }

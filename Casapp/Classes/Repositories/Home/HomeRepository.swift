@@ -25,4 +25,8 @@ final class HomeRepository {
     func fetchAds(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
         homeService.fetchAds(completionBlock: completionBlock)
     }
+    
+    func fetchHomeDetail(id: String, completionBlock: @escaping(Result<HomeDto, Error>) -> Void) {
+        homeService.fetchHomeDetail(id: id, completionBlock: completionBlock)
+    }
 }

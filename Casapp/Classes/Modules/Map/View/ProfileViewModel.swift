@@ -17,4 +17,8 @@ final class ProfileViewModel: ObservableObject {
     func signOut() -> Bool {
         return authenticationRepository.signOut()
     }
+    
+    func updatePassword(password: String) {
+        authenticationRepository.updatePassword(password: password)
+    }
 }

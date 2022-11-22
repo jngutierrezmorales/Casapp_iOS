@@ -10,10 +10,14 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject private var viewModel = HomeViewModel()
     @State private var navigateTo: String? = nil
+    @State private var home: Home = Home()
     
     var body: some View {
-        NavigationView {
-            List(viewModel.homes, id: \.homeId) { home in
+        VStack {
+            NavigationLink(destination: DetailView(home: self.$home), tag: "showDetail", selection: $navigateTo) { }
+            
+            NavigationView {
+                List(viewModel.homes, id: \.homeId) { home in
                     Section {
                         AsyncImage(url: URL(string: home.image ?? "img_test")) { image in
                             image.resizable()
@@ -25,20 +29,21 @@ struct HomeView: View {
                             ZStack {
                                 Text(home.state ?? "")
                                     .padding(8)
+                                    .font(Font.body.bold())
                                     .foregroundColor(.white)
                             }
-                                .background(.black)
-                                .opacity(0.9)
-                                .cornerRadius(10.0)
-                                .padding(8),
+                            .background(.black)
+                            .opacity(0.9)
+                            .cornerRadius(10.0)
+                            .padding(8),
                             alignment: .bottomTrailing
                         )
-
+                        
                         HStack {
                             Label(home.location ?? "", systemImage: "map.fill")
                                 .foregroundColor(.black)
                                 .font(.system(size: 12))
-
+                            
                             Label(("\(home.size ?? "")m"), systemImage: "house.and.flag.fill")
                                 .foregroundColor(.black)
                                 .font(.system(size: 12))
@@ -49,9 +54,15 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        self.home = home
+                        navigateTo = "showDetail"
+                    }
                 }
                 .listRowInsets(EdgeInsets())
                 .listStyle(.insetGrouped)
+            }
         }
     }
 }

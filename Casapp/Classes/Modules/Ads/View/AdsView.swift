@@ -10,10 +10,16 @@ import SwiftUI
 struct AdsView: View {
     @ObservedObject private var viewModel = AdsViewModel()
     @State private var navigateTo: String? = nil
+    @State private var home: Home = Home()
     
     var body: some View {
         NavigationView {
-            List(viewModel.ads, id: \.homeId) { home in
+            ZStack(alignment: .bottomTrailing) {
+                NavigationLink(destination: DetailView(home: self.$home), tag: "showDetail", selection: $navigateTo) { }
+                
+                NavigationLink(destination: PublishView(), tag: "showPublish", selection: $navigateTo) { }
+                
+                List(viewModel.ads, id: \.homeId) { home in
                     Section {
                         AsyncImage(url: URL(string: home.image ?? "img_test")) { image in
                             image.resizable()
@@ -25,6 +31,7 @@ struct AdsView: View {
                             ZStack {
                                 Text(home.state ?? "")
                                     .padding(8)
+                                    .font(Font.body.bold())
                                     .foregroundColor(.white)
                             }
                                 .background(.black)
@@ -33,12 +40,12 @@ struct AdsView: View {
                                 .padding(8),
                             alignment: .bottomTrailing
                         )
-
+                        
                         HStack {
                             Label(home.location ?? "", systemImage: "map.fill")
                                 .foregroundColor(.black)
                                 .font(.system(size: 12))
-
+                            
                             Label(("\(home.size ?? "")m"), systemImage: "house.and.flag.fill")
                                 .foregroundColor(.black)
                                 .font(.system(size: 12))
@@ -49,15 +56,26 @@ struct AdsView: View {
                         }
                         .frame(maxWidth: .infinity)
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        self.home = home
+                        navigateTo = "showDetail"
+                    }
                 }
                 .listRowInsets(EdgeInsets())
                 .listStyle(.insetGrouped)
+                
+                Button(action: {
+                    navigateTo = "showPublish"
+                }) {
+                    Image(systemName: "plus.circle.fill")
+                        .resizable()
+                        .frame(width: 55, height: 55)
+                        .foregroundColor(Color(.black))
+                        .shadow(color: .gray, radius: 0.2, x: 1, y: 1)
+                }
+                .padding()
+            }
         }
-    }
-}
-
-struct AdsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AdsView()
     }
 }

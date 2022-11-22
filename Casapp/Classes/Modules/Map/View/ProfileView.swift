@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var mainViewModel = ProfileViewModel()
+    @ObservedObject var viewModel = ProfileViewModel()
     @State private var navigateTo: String? = nil
     @State var password: String = ""
     @State private var darkMode: Bool = false
@@ -54,14 +54,14 @@ struct ProfileView: View {
                     
                     Spacer()
                     
-                    TextField("Escribe aqui", text: $password)
+                    SecureField("Escribe aqui", text: $password)
                         .padding(.horizontal)
                         .textFieldStyle(.roundedBorder)
                     
                     Spacer()
                     
                     Button("Modificar contraseña") {
-                        
+                        viewModel.updatePassword(password: password)
                     }
                     .frame(height: 45)
                     .buttonStyle(.bordered)
@@ -129,7 +129,7 @@ struct ProfileView: View {
     }
     
     private func logout() -> Bool {
-        return mainViewModel.signOut()
+        return viewModel.signOut()
     }
 }
 

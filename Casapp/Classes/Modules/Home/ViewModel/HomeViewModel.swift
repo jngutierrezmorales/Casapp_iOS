@@ -17,6 +17,7 @@ final class HomeViewModel: ObservableObject {
     private let homeRepository: HomeRepository
     @Published var currentState: HomeState = .INITIAL
     @Published var homes: [Home] = []
+    @Published var homeId: String = ""
     @Published var messageError: String?
     
     init(homeRepository: HomeRepository = HomeRepository(homeService: HomeService())) {

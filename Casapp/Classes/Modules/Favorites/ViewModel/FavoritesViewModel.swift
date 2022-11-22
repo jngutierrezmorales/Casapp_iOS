@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 enum FavoritesState {
     case INITIAL
@@ -16,6 +17,7 @@ final class FavoritesViewModel: ObservableObject {
     private let homeRepository: HomeRepository
     @Published var currentState: FavoritesState = .INITIAL
     @Published var favorites: [Home] = []
+    @Published var homeId: String = ""
     @Published var messageError: String?
     
     init(homeRepository: HomeRepository = HomeRepository(homeService: HomeService())) {

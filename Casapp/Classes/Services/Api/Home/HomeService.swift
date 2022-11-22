@@ -14,6 +14,7 @@ final class HomeService {
     private let database = Firestore.firestore()
     @Published var homes: [HomeDto] = []
     private let user = AuthenticationRepository(authenticationService: AuthenticationService()).getUser().id
+    private var homeDto: HomeDto = HomeDto()
     
     func fetchHomes(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
         homes.removeAll()
@@ -192,6 +193,43 @@ final class HomeService {
                     self.homes.append(home)
                 }
                 completionBlock(.success(self.homes))
+            }
+        }
+    }
+    
+    func fetchHomeDetail(id: String, completionBlock: @escaping(Result<HomeDto, Error>) -> Void) {
+        let ref = database.collection("homes")
+            .document(id)
+        
+        ref.getDocument {(document, error) in
+            guard error == nil else {
+                print("fetchHomeDetail error", error ?? "")
+                return
+            }
+            
+            if let document = document, document.exists {
+                let data = document.data()
+                
+                if let data = data {
+                    self.homeDto.homeId = data["homeId"] as? String ?? ""
+                    self.homeDto.title = data["title"] as? String ?? ""
+                    self.homeDto.description = data["description"] as? String ?? ""
+                    self.homeDto.imageUrl = data["imageUrl"] as? String ?? ""
+                    self.homeDto.price = data["price"] as? String ?? ""
+                    self.homeDto.size = data["size"] as? String ?? ""
+                    self.homeDto.location = data["location"] as? String ?? ""
+                    self.homeDto.latitude = data["latitude"] as? Double ?? 0.0
+                    self.homeDto.longitude = data["longitude"] as? Double ?? 0.0
+                    self.homeDto.phone = data["phone"] as? String ?? ""
+                    self.homeDto.homeState = data["homeState"] as? String ?? ""
+                    self.homeDto.userId = data["userId"] as? String ?? ""
+                    self.homeDto.owner = data["owner"] as? String ?? ""
+                    self.homeDto.publishTime = data["publishTime"] as? String ?? ""
+                    self.homeDto.isPublished = data["isPublished"] as? Bool ?? true
+                    self.homeDto.isFavorite = data["isFavorite"] as? Bool ?? false
+                    
+                    completionBlock(.success(self.homeDto))
+                }
             }
         }
     }

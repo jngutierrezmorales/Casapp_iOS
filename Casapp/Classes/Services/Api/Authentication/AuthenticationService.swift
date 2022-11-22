@@ -70,4 +70,10 @@ final class AuthenticationService {
         
         return logout
     }
+    
+    func updatePassword(password: String) {
+        user?.updatePassword(to: password) { result in
+            print("Contraseña modificada: \(password)")
+        }
+    }
 }
