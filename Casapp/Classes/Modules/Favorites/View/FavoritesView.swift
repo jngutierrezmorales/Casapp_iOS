@@ -17,7 +17,6 @@ struct FavoritesView: View {
             ZStack {
                 NavigationLink(destination: DetailView(home: self.$home), tag: "showDetail", selection: $navigateTo) { }
                 
-                NavigationView {
                     List(viewModel.favorites, id: \.homeId) { home in
                         Section {
                             AsyncImage(url: URL(string: home.image ?? "img_test")) { image in
@@ -65,6 +64,8 @@ struct FavoritesView: View {
                     .listStyle(.insetGrouped)
                 }
             }
+        .onAppear {
+            viewModel.fetchFavorites()
         }
     }
 }

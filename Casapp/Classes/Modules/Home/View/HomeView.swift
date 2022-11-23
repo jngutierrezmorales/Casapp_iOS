@@ -63,6 +63,9 @@ struct HomeView: View {
                 .listRowInsets(EdgeInsets())
                 .listStyle(.insetGrouped)
             }
+            .onAppear {
+                viewModel.fetchHomes()
+            }
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MessageUI
 
 struct DetailView: View {
     @ObservedObject private var viewModel = DetailViewModel()
@@ -13,6 +14,8 @@ struct DetailView: View {
     @State private var isFavorite: Bool = false
     @State private var emailBody: String = ""
     @Binding var home: Home
+    @State private var sendEmail = false
+    let constants = Constants.shared
     
     var body: some View {
         NavigationView {
@@ -22,7 +25,7 @@ struct DetailView: View {
                     
                     Group {
                         ZStack {
-                            AsyncImage(url: URL(string: home.image ?? "img_test")) { image in
+                            AsyncImage(url: URL(string: viewModel.home.image ?? "img_test")) { image in
                                 image.resizable()
                             } placeholder: {
                                 ProgressView()
@@ -30,9 +33,17 @@ struct DetailView: View {
                             .frame(maxWidth: .infinity, maxHeight: 200)
                             .overlay(
                                 Button(action: {
-                                    
+                                    if home.isFavorite ?? false {
+                                        home.isFavorite = false
+                                        
+                                        viewModel.updateFavorite(home: viewModel.home, isFavorite: false)
+                                    } else {
+                                        home.isFavorite = true
+                                        
+                                        viewModel.updateFavorite(home: viewModel.home, isFavorite: true)
+                                    }
                                 }) {
-                                    if isFavorite {
+                                    if home.isFavorite ?? false {
                                         Image(systemName: "heart.fill")
                                             .resizable()
                                             .frame(width: 25, height: 22)
@@ -53,7 +64,7 @@ struct DetailView: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                         
-                        Text(home.title ?? "")
+                        Text(viewModel.home.title ?? "")
                             .font(.system(size: 24, weight: .bold))
                             .padding()
                     }
@@ -64,14 +75,14 @@ struct DetailView: View {
                                 .resizable()
                                 .frame(width: 25, height: 25)
                             
-                            Text(home.state ?? "")
+                            Text(viewModel.home.state ?? "")
                                 .padding()
                             
                             Image(systemName: "eurosign.square.fill")
                                 .resizable()
                                 .frame(width: 25, height: 25)
                             
-                            Text(home.price ?? "")
+                            Text(viewModel.home.price ?? "")
                                 .padding()
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -82,14 +93,14 @@ struct DetailView: View {
                                 .resizable()
                                 .frame(width: 25, height: 25)
                             
-                            Text("\(home.size ?? "") metros")
+                            Text("\(viewModel.home.size ?? "") metros")
                                 .padding()
                             
                             Image(systemName: "location.square.fill")
                                 .resizable()
                                 .frame(width: 25, height: 25)
                             
-                            Text(home.location ?? "")
+                            Text(viewModel.home.location ?? "")
                                 .padding()
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -103,7 +114,7 @@ struct DetailView: View {
                             .font(.system(size: 24, weight: .bold))
                             .padding()
                         
-                        Text(home.description ?? "")
+                        Text(viewModel.home.description ?? "")
                             .padding()
                         
                         Divider()
@@ -114,11 +125,10 @@ struct DetailView: View {
                             .font(.system(size: 24, weight: .bold))
                             .padding()
                         
-                        Button(home.phone ?? "") {
+                        Button(viewModel.home.phone ?? "") {
                             
                         }
                         .frame(height: 45)
-                        .buttonStyle(.bordered)
                         .frame(maxWidth: .infinity)
                         .background(Color(.black))
                         .foregroundColor(.white)
@@ -139,17 +149,28 @@ struct DetailView: View {
                             .padding(.horizontal)
                             .textFieldStyle(.roundedBorder)
                         
-                        Button("Enviar mensaje") {
-                            
+                        HStack {
+                            if MFMailComposeViewController.canSendMail() {
+                                Button {
+                                    sendEmail.toggle()
+                                } label: {
+                                    Text(constants.sendButtonText)
+                                }
+                                .frame(height: 45)
+                                .frame(maxWidth: .infinity)
+                                .background(Color(.black))
+                                .foregroundColor(.white)
+                                .font(Font.body.bold())
+                                .clipShape(Capsule())
+                                .padding(.horizontal)
+                            } else {
+                                Text(constants.noSupportText)
+                                    .multilineTextAlignment(.center)
+                            }
                         }
-                        .frame(height: 45)
-                        .buttonStyle(.bordered)
-                        .frame(maxWidth: .infinity)
-                        .background(Color(.black))
-                        .foregroundColor(.white)
-                        .font(Font.body.bold())
-                        .clipShape(Capsule())
-                        .padding(.horizontal)
+                        .sheet(isPresented: $sendEmail) {
+                            MailView(content: constants.contentPreText, to: constants.email, subject: constants.subject)
+                        }
                     }
                     
                     Group {
@@ -179,6 +200,9 @@ struct DetailView: View {
                         .frame(maxHeight: .infinity)
                 }
             }
+        }
+        .onAppear {
+            viewModel.fetchHomeDetail(homeId: home.homeId)
         }
     }
 }

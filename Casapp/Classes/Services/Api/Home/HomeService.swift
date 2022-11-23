@@ -77,11 +77,10 @@ final class HomeService {
     
     func fetchHomesFavorites(completionBlock: @escaping(Result<[HomeDto], Error>) -> Void) {
         homes.removeAll()
-        
+
         let ref = database.collectionGroup("favorites")
             .whereField("userId", isEqualTo: user.valueOrEmpty)
             .whereField("isFavorite", isEqualTo: true)
-            .order(by: "homeState", descending: true)
         
         ref.getDocuments { snapshot, error in
             guard error == nil else {
@@ -203,7 +202,7 @@ final class HomeService {
         
         ref.getDocument {(document, error) in
             guard error == nil else {
-                print("fetchHomeDetail error", error ?? "")
+                print("fetchHomeDetail service error", error ?? "")
                 return
             }
             
@@ -232,5 +231,54 @@ final class HomeService {
                 }
             }
         }
+    }
+    
+    func updateFavorite(home: Home, isFavorite: Bool) {
+        database.collection("homes").document(home.homeId)
+            .collection("favorites").document(user ?? "")
+            .setData([
+                "isFavorite": isFavorite,
+                "userId": user ?? "",
+                "homeId": home.homeId,
+                "imageUrl": home.image ?? "",
+                "location": home.location ?? "",
+                "size": home.size ?? "",
+                "price": home.price ?? "",
+                "homeState": home.state ?? ""
+            ]) { error in
+                if let error = error {
+                    print("updateFavorite service error: \(error)")
+                } else {
+                    print("favorite updated")
+                }
+            }
+    }
+    
+    func publishHome(homeDto: HomeDto) {
+        database.collection("homes").document(homeDto.homeId ?? "")
+            .setData([
+                "homeId": homeDto.homeId ?? "",
+                "title": homeDto.title ?? "",
+                "description": homeDto.description ?? "",
+                "imageUrl": homeDto.imageUrl ?? "",
+                "price": homeDto.price ?? "",
+                "size": homeDto.size ?? "",
+                "location": homeDto.location ?? "",
+                //"latitude": homeDto.latitude ?? 0.0,
+                //"longitude": homeDto.longitude ?? 0.0,
+                //"phone": homeDto.phone ?? "",
+                //"homeState": homeDto.homeState ?? "",
+                //"userId": user ?? "",
+                //"owner": homeDto.owner ?? "",
+                //"publishTime": homeDto.publishTime ?? "",
+                //"isPublished": homeDto.isPublished ?? true,
+                //"isFavorite": homeDto.isFavorite ?? false
+            ]) { error in
+                if let error = error {
+                    print("updateFavorite service error: \(error)")
+                } else {
+                    print("home published")
+                }
+            }
     }
 }

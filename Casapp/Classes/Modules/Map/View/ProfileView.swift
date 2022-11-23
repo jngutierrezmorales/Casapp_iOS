@@ -64,7 +64,6 @@ struct ProfileView: View {
                         viewModel.updatePassword(password: password)
                     }
                     .frame(height: 45)
-                    .buttonStyle(.bordered)
                     .frame(maxWidth: .infinity)
                     .background(Color(.black))
                     .foregroundColor(.white)
@@ -98,7 +97,6 @@ struct ProfileView: View {
                             }
                         }
                         .frame(height: 45)
-                        .buttonStyle(.bordered)
                         .frame(maxWidth: .infinity)
                         .background(Color(.black))
                         .foregroundColor(.white)
@@ -112,7 +110,6 @@ struct ProfileView: View {
                         print("Token de usuario: ")
                     }
                     .frame(height: 45)
-                    .buttonStyle(.bordered)
                     .frame(maxWidth: .infinity)
                     .background(Color(.black))
                     .foregroundColor(.white)

@@ -66,7 +66,6 @@ struct LoginView: View {
                                 login(username: username, password: password)
                             }
                             .frame(height: 45)
-                            .buttonStyle(.bordered)
                             .frame(maxWidth: .infinity)
                             .background(Color(.black))
                             .foregroundColor(.white)
@@ -78,7 +77,6 @@ struct LoginView: View {
                                 navigateTo = "showRegister"
                             }
                             .frame(height: 45)
-                            .buttonStyle(.bordered)
                             .frame(maxWidth: .infinity)
                             .background(Color(.black))
                             .foregroundColor(.white)

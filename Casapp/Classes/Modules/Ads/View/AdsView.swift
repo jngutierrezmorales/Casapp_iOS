@@ -77,5 +77,8 @@ struct AdsView: View {
                 .padding()
             }
         }
+        .onAppear {
+            viewModel.fetchAds()
+        }
     }
 }

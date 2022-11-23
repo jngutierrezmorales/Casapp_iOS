@@ -29,4 +29,12 @@ final class HomeRepository {
     func fetchHomeDetail(id: String, completionBlock: @escaping(Result<HomeDto, Error>) -> Void) {
         homeService.fetchHomeDetail(id: id, completionBlock: completionBlock)
     }
+    
+    func updateFavorite(home: Home, isFavorite: Bool) {
+        homeService.updateFavorite(home: home, isFavorite: isFavorite)
+    }
+    
+    func publishHome(homeDto: HomeDto) {
+        homeService.publishHome(homeDto: homeDto)
+    }
 }

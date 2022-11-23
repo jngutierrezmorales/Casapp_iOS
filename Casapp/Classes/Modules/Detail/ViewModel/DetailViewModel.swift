@@ -34,4 +34,8 @@ final class DetailViewModel: ObservableObject {
             }
         }
     }
+    
+    func updateFavorite(home: Home, isFavorite: Bool) {
+        homeRepository.updateFavorite(home: home, isFavorite: isFavorite)
+    }
 }

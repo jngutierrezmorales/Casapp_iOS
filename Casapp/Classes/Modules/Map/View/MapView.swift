@@ -9,7 +9,10 @@ import SwiftUI
 
 struct MapView: View {
     var body: some View {
-        Text("Mapa")
+        NavigationView {
+            Text("Mapa")
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
